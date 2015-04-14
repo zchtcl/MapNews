@@ -6,4 +6,7 @@
 	
     <!-- Title bar height -->
     <dimen name="title_bar_height">48dp</dimen>
+    
+    <!-- News header height -->
+    <dimen name="news_header_height">48dp</dimen>
 </resources>
