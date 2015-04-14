@@ -26,7 +26,6 @@ public class NewsLayout extends ViewGroup {
     private int headerViewtop;
     private int dragRange;
     private float dragOffset;
-    private boolean isFirstLayout = true;
 
     public NewsLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -45,6 +44,16 @@ public class NewsLayout extends ViewGroup {
     protected void onFinishInflate() {
         headerView = findViewById(R.id.news_header);
         contentView = findViewById(R.id.news_content);
+        getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                    @SuppressWarnings("deprecation")
+                    @Override
+                    public void onGlobalLayout() {
+                        getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        minimum();
+                    }
+                });
     }
 
     public void maximum() {
@@ -88,19 +97,6 @@ public class NewsLayout extends ViewGroup {
         headerView.layout(l, headerViewtop, r, headerViewBottom);
         contentView.layout(l, headerViewBottom, r,
                 headerViewBottom + contentView.getMeasuredHeight());
-        if (isFirstLayout) {
-            isFirstLayout = false;
-            getViewTreeObserver().addOnGlobalLayoutListener(
-                    new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                        @SuppressWarnings("deprecation")
-                        @Override
-                        public void onGlobalLayout() {
-                            getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            minimum();
-                        }
-                    });
-        }
     }
 
     private float initialX;
